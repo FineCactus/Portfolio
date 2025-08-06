@@ -26,6 +26,8 @@
 
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 </head>
 
@@ -688,35 +690,32 @@
     <h3>Get In Touch</h3>
     <p>Open to freelance projects, collaborations, or just a friendly tech chat. Let's connect and bring ideas to life</p>
 
-    <form action="https://formsubmit.co/ashinaji02@gmail.com" method="POST">
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_template" value="table">
-      <input type="hidden" name="_autoresponse" value="Thanks for reaching out! I’ll get back to you soon.">
+          <form id="contactForm">
+            <div class="row gy-4">
 
-      <div class="row gy-4">
+          <div class="col-md-6">
+            <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+          </div>
 
-        <div class="col-md-6">
-          <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+          <div class="col-md-6">
+            <input type="email" name="email" class="form-control" placeholder="Your Email" required>
+          </div>
+
+          <div class="col-12">
+            <input type="text" name="subject" class="form-control" placeholder="Subject" required>
+          </div>
+
+          <div class="col-12">
+            <textarea name="message" rows="6" class="form-control" placeholder="Message" required></textarea>
+          </div>
+
+          <div class="col-12 text-center">
+            <button type="submit" class="btn">Send Message</button>
+          </div>
+
         </div>
+      </form>
 
-        <div class="col-md-6">
-          <input type="email" name="email" class="form-control" placeholder="Your Email" required>
-        </div>
-
-        <div class="col-12">
-          <input type="text" name="subject" class="form-control" placeholder="Subject" required>
-        </div>
-
-        <div class="col-12">
-          <textarea name="message" rows="6" class="form-control" placeholder="Message" required></textarea>
-        </div>
-
-        <div class="col-12 text-center">
-          <button type="submit" class="btn">Send Message</button>
-        </div>
-
-      </div>
-    </form>
   </div>
 </div>
 
@@ -759,6 +758,48 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script>
+  document.getElementById("contactForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+
+    fetch("https://formsubmit.co/ajax/ashinaji02@gmail.com", {
+      method: "POST",
+      body: formData
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success === "true") {
+          Swal.fire({
+            icon: 'success',
+            title: 'Message Sent!',
+            text: 'Thank you for reaching out. I\'ll get back to you soon!',
+            confirmButtonColor: '#3085d6',
+          });
+          form.reset();
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops!',
+            text: 'Something went wrong. Please try again.',
+            confirmButtonColor: '#d33',
+          });
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'Unable to send message.',
+          confirmButtonColor: '#d33',
+        });
+      });
+  });
+</script>
+
 
 </body>
 
